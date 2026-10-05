@@ -10,6 +10,7 @@ Map of the repo. Start here when picking up new work. Each entry is a one-line s
 
 ## Top-level
 - [DRAWING_MODES_TUTORIAL_VOICEOVER.md](DRAWING_MODES_TUTORIAL_VOICEOVER.md) — editable narration source for the Drawing Modes tutorial video
+- [docs/FEATURE_REFERENCE.md](docs/FEATURE_REFERENCE.md) — user-facing reference for the major visible features and workflows in the app
 - [src/](src/INDEX.md) — application source (React + TS). **See its INDEX for the breakdown.**
 - [src-tauri/](src-tauri/) — Tauri (Rust) wrapper for desktop builds
 - [e2e/](e2e/README.md) — Playwright browser coverage, including the split CAM operation and surface-finish specs, and CI lane membership
