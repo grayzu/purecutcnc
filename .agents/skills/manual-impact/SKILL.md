@@ -109,7 +109,7 @@ must describe the final PR. When review renames a label, drops an option or
 changes behaviour, update the section in the same push:
 
 ```bash
-gh pr edit NN --body-file body.md
+gh pr edit NN --repo grayzu/purecutcnc --body-file body.md
 ```
 
 Editing the description re-runs the check and moves the `manual-impact` label.

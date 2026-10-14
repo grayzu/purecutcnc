@@ -7,6 +7,7 @@ contracts and the one matching `planning/*.md` document for a durable design
 reference.
 
 **Critical Path — read this first, then the full AGENTS.md:**
+- **Fork only.** This is `grayzu/purecutcnc`. Issues, PRs, comments and labels go there (`gh … --repo grayzu/purecutcnc`); never write to `PureCutCNC/*`. Upstream board/Priority steps are skipped.
 - **Issue first.** Open a GitHub issue (#NN) before any code. Fast lane skips Plan/Approve **only** if `npm run check:fast-lane` is green.
 - **Branch, never `main`.** Work on a feature branch; the `main-requires-pr` ruleset blocks merge without a PR.
 - **Build green.** `npm run build` (lint + tsc + tests + icons) must pass before committing.
@@ -41,7 +42,7 @@ instead of duplicating its credential and worktree procedure here.
 
 ### Issue tracker
 
-GitHub Issues on this repo, via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+GitHub Issues on `grayzu/purecutcnc` (the fork, never upstream `PureCutCNC/purecutcnc`), via the `gh` CLI. See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 
