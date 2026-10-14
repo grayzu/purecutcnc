@@ -124,7 +124,7 @@ interface Plan {
 }
 
 const token = process.env.GITHUB_TOKEN ?? ''
-const [owner, repo] = (process.env.GITHUB_REPOSITORY ?? 'PureCutCNC/purecutcnc').split('/')
+const [owner, repo] = (process.env.GITHUB_REPOSITORY ?? 'grayzu/purecutcnc').split('/')
 const apply = process.argv.includes('--apply') || process.env.DRY_RUN === 'false'
 const now = Date.now()
 

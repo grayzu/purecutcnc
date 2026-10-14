@@ -30,7 +30,9 @@ If the `codebase-memory-mcp` server is connected, prefer its graph tools (`searc
 
 ## Workflow: Issue → Plan → Approve → Implement → PR
 
-**Every task follows this loop, and every task gets an issue.** The only steps a change may skip are 2 and 3 (Plan and Approve), and only when the **Fast lane** below says so — nothing else here is optional. The plan can be tiny if the task is tiny; the point is that intent is written down, agreed, and traceable. Tasks are tracked on the GitHub Project board ([PureCutCNC project #1](https://github.com/orgs/PureCutCNC/projects/1)), **not** in checked-in plan files.
+**Every task follows this loop, and every task gets an issue.** The only steps a change may skip are 2 and 3 (Plan and Approve), and only when the **Fast lane** below says so — nothing else here is optional. The plan can be tiny if the task is tiny; the point is that intent is written down, agreed, and traceable. Tasks are tracked in GitHub issues on `grayzu/purecutcnc`, **not** in checked-in plan files.
+
+**This checkout is the `grayzu/purecutcnc` fork.** Every issue, PR, comment, label and API write goes to `grayzu/purecutcnc` — pass `--repo grayzu/purecutcnc` on `gh` commands and never create or modify anything in `PureCutCNC/*` (the upstream repo, its org board, or `PureCutCNC/purecutcnc.github.io`). Reading upstream is fine. The board steps below (Project board card, Status, Size, the org Priority field) belong to the upstream org and are **skipped** here; labels still apply. Agent `gh` calls run with a fine-grained token scoped to the fork, so upstream writes fail with a 403 — treat that as a bug in the command, not a permissions problem to work around.
 
 1. **Issue.** Open a GitHub issue for the work (`gh issue create`). Add it to the Project board, set the area label and Size, and set Status to `Backlog` (or `Ready` once planned).
 2. **Plan.** Before changing any code, write the plan **in the issue** — in the body, or a follow-up comment if it grows. Do not create a `planning/*_Plan.md` file; the issue is the plan's home. **Fast lane: skipped — check below before you write a plan.**
@@ -446,7 +448,7 @@ STL files are imported via `src/import/stl.ts`. The pipeline:
 
 ## Planning & Design Docs
 
-Active tasks, backlog, and tech-debt live on the [GitHub Project board](https://github.com/orgs/PureCutCNC/projects/1) — see the workflow section above.
+Active tasks, backlog, and tech-debt live in [GitHub issues on the fork](https://github.com/grayzu/purecutcnc/issues) — see the workflow section above.
 
 `planning/` now holds **durable design & reference docs only** (the "why" behind the data shapes, algorithm references, area-specific design). Check [`planning/INDEX.md`](planning/INDEX.md) for the one that matches your area before starting feature work — these take precedence over general defaults. They are living reference, not task trackers; update them in the same commit when you change the behavior they describe.
 

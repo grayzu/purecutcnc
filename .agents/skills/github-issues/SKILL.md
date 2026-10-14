@@ -18,8 +18,16 @@ wiring, Priority, status moves, PR opening. Then **verify after every mutation**
 
 ## The environment
 
-- Repo: `PureCutCNC/purecutcnc`
-- Project board: org `PureCutCNC`, project **#1** (node id `PVT_kwDOEEztyc4Bbqk-`)
+- Repo: **`grayzu/purecutcnc`** — a fork. Pass `--repo grayzu/purecutcnc` on
+  every `gh issue`/`gh pr` command and use `repos/grayzu/purecutcnc/…` in
+  `gh api` paths. Never write to `PureCutCNC/*`; the agent token is scoped to
+  the fork, so an upstream write fails with 403.
+- **Fork mode: skip the board and Priority.** The project board, its fields and
+  the org-level issue fields below belong to the upstream `PureCutCNC` org.
+  From this fork, run only issue create, labels and PR mechanics; skip step 2
+  of the recipe, the board/Priority verification, and Status moves. The IDs
+  are kept for reference only.
+- Upstream project board (not used here): org `PureCutCNC`, project **#1** (node id `PVT_kwDOEEztyc4Bbqk-`)
 - Org-level issue fields (native, set per-issue): `Priority` (R1), `Start date`,
   `Target date`, `Effort`
 - Board fields: `Status`, `Size`, `Area`, plus read-only/derived ones
@@ -47,10 +55,11 @@ Area guidance: engine/toolpath → `toolpath`, canvas/panels → `ui`, palette �
 1. **Create** (REST, cheap):
 
    ```bash
-   gh issue create --title "…" --body "…" --label bug   # or enhancement/process/…
+   gh issue create --repo grayzu/purecutcnc --title "…" --body "…" --label bug   # or enhancement/process/…
    ```
 
-2. **Wire board + Priority** (GraphQL, one batch). Set `N`, the issue number,
+2. **Wire board + Priority** (GraphQL, one batch). **Upstream only — skip in
+   this fork.** Set `N`, the issue number,
    and the field values, then paste:
 
    ```bash
@@ -69,7 +78,7 @@ Area guidance: engine/toolpath → `toolpath`, canvas/panels → `ui`, palette �
    AREA   = ('PVTSSF_lADOEEztyc4Bbqk-zhWZltM', '21d55d78')   # ui
    PRIO   = ('IFSS_kgDOAnL9vg', 'IFSSO_kgDOBEkkKA')          # Medium
 
-   r = gql('query($n:Int!){ repository(owner:"PureCutCNC",name:"purecutcnc"){ issue(number:$n){ id } } }', n=N)
+   r = gql('query($n:Int!){ repository(owner:"grayzu",name:"purecutcnc"){ issue(number:$n){ id } } }', n=N)
    issue_id = r['data']['repository']['issue']['id']
    PROJECT = 'PVT_kwDOEEztyc4Bbqk-'
    r = gql('mutation($p:ID!,$c:ID!){ addProjectV2ItemById(input:{projectId:$p,contentId:$c}){ item{ id } } }',
@@ -86,16 +95,16 @@ Area guidance: engine/toolpath → `toolpath`, canvas/panels → `ui`, palette �
    EOF
    ```
 
-3. **Verify** (never skip — a mutation can 404 silently in a script):
+3. **Verify** (upstream only, like step 2; never skip it there — a mutation can 404 silently in a script):
 
    ```bash
-   gh api repos/PureCutCNC/purecutcnc/issues/N --jq '.issue_field_values[] | select(.issue_field_name=="Priority") | .single_select_option.name'
+   gh api repos/grayzu/purecutcnc/issues/N --jq '.issue_field_values[] | select(.issue_field_name=="Priority") | .single_select_option.name'
    ```
 
    Board card fields — item id via the issue (cheaper than paginating items):
 
    ```bash
-   gh api graphql -f query='query($n:Int!){ repository(owner:"PureCutCNC",name:"purecutcnc"){ issue(number:$n){ projectItems(first:5){ nodes{ id } } } } }' -F n=N
+   gh api graphql -f query='query($n:Int!){ repository(owner:"grayzu",name:"purecutcnc"){ issue(number:$n){ projectItems(first:5){ nodes{ id } } } } }' -F n=N
    gh api graphql -f query='query($i:ID!){ node(id:$i){ ... on ProjectV2Item { fieldValues(first:10){ nodes{ ... on ProjectV2ItemFieldSingleSelectValue { field{... on ProjectV2FieldCommon{name}} name } } } } } }' -F i='ITEM_ID'
    ```
 
@@ -140,7 +149,7 @@ card in the wrong state: `gh pr view --json ...` ≠ board state.
 
 ## PR mechanics
 
-- `gh pr create --title … --body …` with `Closes #NN` in the body (merging
+- `gh pr create --repo grayzu/purecutcnc --base main --title … --body …` with `Closes #NN` in the body (merging
   auto-closes and moves the card to Done).
 - Label `fast-lane` **only** when `npm run check:fast-lane` is green; the
   `fast-lane-guard` CI job re-checks every labeled PR and blocks merge if red.
